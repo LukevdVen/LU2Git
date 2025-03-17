@@ -1,23 +1,21 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Fase 1: Service Builder
+// Controleer of de SqlConnectionString aanwezig is in de configuratie
+bool sqlConnectionStringFound = !string.IsNullOrWhiteSpace(builder.Configuration.GetValue<string>("SqlConnectionString"));
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+// Fase 2: App Builder
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Map een eenvoudige diagnostische homepage
+app.MapGet("/", () =>
 {
-    app.MapOpenApi();
-}
+    // Haal de SqlConnectionString op
+    var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
 
-app.UseHttpsRedirection();
+    // Toon een bericht met of de connection string gevonden is
+    return $"The API is up. Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}";
+});
 
-app.UseAuthorization();
-
-app.MapControllers();
-
+// Start de applicatie
 app.Run();
