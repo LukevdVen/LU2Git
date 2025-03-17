@@ -1,0 +1,6 @@
+@LU2Git_HostAddress = http://localhost:5108
+
+GET {{LU2Git_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
