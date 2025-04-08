@@ -10,7 +10,7 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Connection string ophalen uit appsettings of secrets
-string dbConnectionString = builder.Configuration.GetConnectionString("Defaultconnection");
+string dbConnectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
 if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("The connection string has not been initialized.");
 
