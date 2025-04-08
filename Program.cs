@@ -1,69 +1,42 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using System;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-var app = builder.Build();
-
-// Get the logger
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-
-// Haal de connection string op uit User Secrets
-string dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Log de connection string voor debuggen (let op, stel in productie geen gevoelige data bloot)
-logger.LogInformation("Connection string loaded: {ConnectionString}", dbConnectionString);
-
-// Controleer of de connection string gevonden is
+// 1. Connection string ophalen uit appsettings of secrets
+string dbConnectionString = builder.Configuration.GetConnectionString("Defaultconnection");
 if (string.IsNullOrWhiteSpace(dbConnectionString))
-{
-    logger.LogError("Connection string is null or empty.");
     throw new InvalidOperationException("The connection string has not been initialized.");
-}
-else
-{
-    logger.LogInformation("Connection string is initialized.");
-}
 
-builder.Services.AddControllers();
+// 2. Identity en Dapper stores toevoegen
+builder.Services
+    .AddIdentity<IdentityUser, IdentityRole>()
+    .AddDapperStores(options => options.ConnectionString = dbConnectionString);
+
+// Nodig voor het aanmaken van gebruikers en login
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 4;
+});
 
 builder.Services.AddAuthorization();
-builder.Services
-    .AddIdentityApiEndpoints<IdentityUser>()
-    .AddDapperStores(options =>
-    {
-        options.ConnectionString = dbConnectionString;
-    });
+builder.Services.AddControllers();
 
-// Ensure the database connection works
-using (var connection = new SqlConnection(dbConnectionString))
-{
-    try
-    {
-        await connection.OpenAsync();
-        logger.LogInformation("Database connection successful.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "Failed to connect to the database.");
-        throw;
-    }
-}
-
+var app = builder.Build();
 app.UseAuthorization();
 app.MapControllers();
 
-app.MapGroup("/account")
-    .MapIdentityApi<IdentityUser>();
-
-app.MapGet("/", () =>
-{
-    return $"The API is up. Connection string found: {(string.IsNullOrWhiteSpace(dbConnectionString) ? "No" : "Yes")}";
-});
+// Root check
+app.MapGet("/", () => "API is running!");
 
 app.Run();
