@@ -54,7 +54,7 @@ app.MapControllers();
 app.MapGroup("/account")
     .MapIdentityApi<IdentityUser>();
 
-// Debug: Root endpoint to confirm API status
+// Debug: Root endpoint to confirm API status.
 app.MapGet("/", () =>
 {
     var connectionStatus = string.IsNullOrWhiteSpace(dbConnectionString) ? "No" : "Yes";
