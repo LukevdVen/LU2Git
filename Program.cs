@@ -17,17 +17,28 @@ if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("The connection string has not been initialized.");
 }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 else
 {
     Console.WriteLine($"Connection string retrieved successfully: {dbConnectionString.Substring(0, Math.Min(dbConnectionString.Length, 20))}..."); // Log only part of the connection string for security
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 builder.Services.AddControllers();
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 builder.Services.AddAuthorization();
+=======
+// Debug: Adding Identity services
+Console.WriteLine("Adding Identity and Dapper stores...");
+>>>>>>> Stashed changes
 =======
 // Debug: Adding Identity services
 Console.WriteLine("Adding Identity and Dapper stores...");
