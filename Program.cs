@@ -11,9 +11,12 @@ if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("The connection string has not been initialized.");
 }
 
-builder.Services.AddControllers();
+// Log connection string for debugging (ensure not to do this in production)
+Console.WriteLine($"Connection String: {dbConnectionString}");
 
+builder.Services.AddControllers();
 builder.Services.AddAuthorization();
+
 builder.Services
     .AddIdentityApiEndpoints<IdentityUser>()
     .AddDapperStores(options =>
