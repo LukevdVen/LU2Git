@@ -9,6 +9,11 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(8080);
+});
+
 // 1. Connection string ophalen uit appsettings of secrets
 string dbConnectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
 if (string.IsNullOrWhiteSpace(dbConnectionString))
