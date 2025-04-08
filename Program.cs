@@ -1,21 +1,37 @@
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Fase 1: Service Builder
-// Controleer of de SqlConnectionString aanwezig is in de configuratie
-bool sqlConnectionStringFound = !string.IsNullOrWhiteSpace(builder.Configuration.GetValue<string>("SqlConnectionString"));
+// Haal de connection string op uit User Secrets
+string dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Fase 2: App Builder
+// Controleer of de connection string gevonden is
+if (string.IsNullOrWhiteSpace(dbConnectionString))
+{
+    throw new InvalidOperationException("The connection string has not been initialized.");
+}
+
+builder.Services.AddControllers();
+
+builder.Services.AddAuthorization();
+builder.Services
+    .AddIdentityApiEndpoints<IdentityUser>()
+    .AddDapperStores(options =>
+    {
+        options.ConnectionString = dbConnectionString;
+    });
+
 var app = builder.Build();
 
-// Map een eenvoudige diagnostische homepage
+app.UseAuthorization();
+app.MapControllers();
+
+app.MapGroup("/account")
+    .MapIdentityApi<IdentityUser>();
+
 app.MapGet("/", () =>
 {
-    // Haal de SqlConnectionString op
-    var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
-
-    // Toon een bericht met of de connection string gevonden is
-    return $"The API is up. Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}";
+    return $"The API is up. Connection string found: {(string.IsNullOrWhiteSpace(dbConnectionString) ? "No" : "Yes")}";
 });
 
-// Start de applicatie
 app.Run();
