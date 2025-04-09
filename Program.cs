@@ -1,14 +1,22 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Haal de connectiestring op uit de configuratie
 string dbConnectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
 if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("Connection string missing.");
 
+// Voeg services toe voor Identity en Dapper
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+
+// Registreer de repository en configuraties
+builder.Services.AddScoped<IEnvironmentRepository, EnvironmentRepository>();
+
 
 builder.Services
     .AddIdentityApiEndpoints<IdentityUser>()

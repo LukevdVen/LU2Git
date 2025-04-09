@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 
@@ -15,6 +17,7 @@ public class AspNetIdentityAuthenticationService : IAuthenticationService
     }
 
     /// <inheritdoc />
+    /// 
     public string? GetCurrentAuthenticatedUserId()
     {
         // Returns the aspnet_User.Id of the authenticated user
