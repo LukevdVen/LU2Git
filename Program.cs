@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 // Haal de connectiestring op uit de configuratie
-string dbConnectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
+var dbConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
 if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("Connection string missing.");
 
