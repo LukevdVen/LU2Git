@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,15 +10,23 @@ string dbConnectionString = builder.Configuration.GetConnectionString("SqlConnec
 if (string.IsNullOrWhiteSpace(dbConnectionString))
     throw new InvalidOperationException("Connection string missing.");
 
-// Voeg services toe voor Identity en Dapper
+// Voeg services toe voor Identity, Dapper en HttpClient
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+    }); // Add NewtonsoftJson configuration here
 builder.Services.AddHttpContextAccessor();
+
+// Register HttpClient for dependency injection
+builder.Services.AddHttpClient();
 
 // Registreer de repository en configuraties
 builder.Services.AddScoped<IEnvironmentRepository, EnvironmentRepository>();
+builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
 
-
+// Register Identity with Dapper stores
 builder.Services
     .AddIdentityApiEndpoints<IdentityUser>()
     .AddRoles<IdentityRole>()
@@ -34,10 +43,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 var app = builder.Build();
 
+// Middleware
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// API Endpoints
 app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 app.MapControllers().RequireAuthorization();
 

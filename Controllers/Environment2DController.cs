@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Mvc;
     [Authorize]
     public class Environment2DController : ControllerBase
     {
-        private readonly IEnvironmentRepository _repository;
+        private readonly IEnvironmentRepository _environmentRepository;
 
         public Environment2DController(IEnvironmentRepository repository)
         {
-            _repository = repository;
+            _environmentRepository = repository;
         }
 
         [HttpGet("userworlds")]
         public async Task<ActionResult<IEnumerable<Environment2D>>> GetAll([FromQuery]string UserName)
         {
-            var environments = await _repository.GetAll(UserName);
+            var environments = await _environmentRepository.GetAll(UserName);
             if (!environments.Any())
             {
                 return NoContent();
@@ -27,7 +27,7 @@ using Microsoft.AspNetCore.Mvc;
         [HttpGet("{id}")]
         public async Task<ActionResult<Environment2D>> GetById(int id)
         {
-            var environment = await _repository.GetById(id);
+            var environment = await _environmentRepository.GetById(id);
             if (environment == null)
             {
                 return NotFound();
@@ -44,14 +44,14 @@ using Microsoft.AspNetCore.Mvc;
                 return BadRequest(ModelState);
             }
 
-            var createdEnvironment = await _repository.Add(environment);
+            var createdEnvironment = await _environmentRepository.Add(environment);
             return CreatedAtAction(nameof(GetById), new { id = createdEnvironment.Id }, createdEnvironment);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _repository.Delete(id);
+            var result = await _environmentRepository.Delete(id);
             if (!result)
             {
                 return NotFound();
