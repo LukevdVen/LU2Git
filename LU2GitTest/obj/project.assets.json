@@ -5459,11 +5459,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2GitTest\\LU2GitTest.csproj",
+      "projectUniqueName": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2GitTest\\LU2GitTest.csproj",
       "projectName": "LU2GitTest",
-      "projectPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2GitTest\\LU2GitTest.csproj",
+      "projectPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2GitTest\\LU2GitTest.csproj",
       "packagesPath": "C:\\Users\\jaapi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2GitTest\\obj\\",
+      "outputPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2GitTest\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5484,8 +5484,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2Git.csproj": {
-              "projectPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2Git.csproj"
+            "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2Git\\LU2Git.csproj": {
+              "projectPath": "C:\\Users\\jaapi\\OneDrive\\Documents\\Vakken 2425\\Unity dev\\LU2Git\\LU2Git\\LU2Git.csproj"
             }
           }
         }
